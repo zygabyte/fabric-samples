@@ -17,14 +17,16 @@ SPDX-License-Identifier: Apache-2.0
 // Bring key classes into scope, most importantly Fabric SDK network class
 const fs = require('fs');
 const yaml = require('js-yaml');
-const { FileSystemWallet, Gateway } = require('fabric-network');
+const { Wallets, Gateway } = require('fabric-network');
 const CommercialPaper = require('../contract/lib/paper.js');
 
-// A wallet stores a collection of identities for use
-const wallet = new FileSystemWallet('../identity/user/balaji/wallet');
 
 // Main program function
 async function main() {
+
+  // A wallet stores a collection of identities for use
+  const wallet = await Wallets.newFileSystemWallet('../identity/user/balaji/wallet');
+
 
   // A gateway defines the peers used to access Fabric networks
   const gateway = new Gateway();
@@ -33,17 +35,17 @@ async function main() {
   try {
 
     // Specify userName for network access
-    // const userName = 'isabella.issuer@magnetocorp.com';
-    const userName = 'Admin@org1.example.com';
+        // Specify userName for network access
+        const userName = 'balaji';
 
     // Load connection profile; will be used to locate a gateway
-    let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/networkConnection.yaml', 'utf8'));
+    let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/connection-org1.yaml', 'utf8'));
 
     // Set connection options; identity and wallet
     let connectionOptions = {
       identity: userName,
       wallet: wallet,
-      discovery: { enabled:false, asLocalhost: true }
+      discovery: { enabled:true, asLocalhost: true }
     };
 
     // Connect to gateway using application specified parameters
